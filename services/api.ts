@@ -5,6 +5,7 @@
  */
 
 import { FormData } from '@/types/form';
+import { generateAndDownloadDocx } from '@/utils/generateDocx';
 
 /** Simulated network latency in milliseconds */
 const MOCK_DELAY_MS = 1500;
@@ -40,6 +41,10 @@ export async function submitRegistrationUpdate(formData: FormData): Promise<ApiR
    */
 
   /* Log payload for development inspection */
+  
+
+  //Convert to docx so the user can sign it at gob.br
+  await generateAndDownloadDocx(formData);
   console.log('[MOCK API] PUT /members/update', JSON.stringify(formData, null, 2));
 
   return {
