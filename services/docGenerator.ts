@@ -7,6 +7,9 @@
  * then shared via the OS share sheet using expo-file-system.
  */
 
+
+import * as FileSystem from 'expo-file-system/legacy'
+import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
 import {
   Document,
@@ -333,43 +336,42 @@ function buildDocument(data: FormData): Document {
  */
 export async function generateAndDownloadDocx(data: FormData): Promise<void> {
   const doc = buildDocument(data);
-  const blob = await Packer.toBlob(doc);
-
   const fileName = `atualizacao_cadastral_${data.cpf.replace(/\D/g, '')}.docx`;
 
   try {
     if (Platform.OS === 'web') {
-    /* ── Web: use file-saver to trigger browser download ─────────── */
-    const { saveAs } = await import('file-saver');
-    saveAs(blob, fileName);
+      // ── Web Path ──────────────────────────────────────────
+      const { saveAs } = await import('file-saver');
+      const blob = await Packer.toBlob(doc);
+      saveAs(blob, fileName);
     } else {
-      /* ── Native: write to cache and share via OS share sheet ──────── */
-      const FileSystem = await import('expo-file-system');
+      // ── Native Path ───────────────────────────────────────
+      // 1. Generate Base64 string directly from the Packer
+      const base64 = await Packer.toBase64String(doc);
+      
+      // 2. Define the path in the cache directory
       const filePath = `${FileSystem.cacheDirectory}${fileName}`;
 
-      /* Convert blob → base64 string for FileSystem.writeAsStringAsync */
-      const arrayBuffer = await blob.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let binary = '';
-      uint8Array.forEach((byte) => { binary += String.fromCharCode(byte); });
-      const base64 = btoa(binary);
-
+      // 3. Write the file using Base64 encoding
       await FileSystem.writeAsStringAsync(filePath, base64, {
-        encoding: FileSystem.EncodingType.Base64,
+        encoding: 'base64',
       });
+      
 
-      /* Open the OS share sheet so the user can save or send the file */
-      const Sharing = await import('expo-sharing');
-      if (await Sharing.isAvailableAsync()) {
+      // 4. Share the file
+      const isSharingAvailable = await Sharing.isAvailableAsync();
+      if (isSharingAvailable) {
         await Sharing.shareAsync(filePath, {
           mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           dialogTitle: 'Salvar Atualização Cadastral',
-          UTI: 'org.openxmlformats.wordprocessingml.document',
+          UTI: 'com.microsoft.word.doc', // Better UTI for iOS Word docs
         });
+      } else {
+        console.error("Sharing is not available on this device");
       }
     }
   } catch (error) {
     console.error('DocGenerator error: ', error);
-    throw error
+    throw error;
   }
 }
