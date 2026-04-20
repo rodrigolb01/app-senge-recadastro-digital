@@ -1,3 +1,5 @@
 # app-senge-reacadastro-digital
 
-[![Open in Bolt](https://bolt.new/static/open-in-bolt.svg)](https://bolt.new/~/sb1-m2rwt745)
+
+eas build -p android --profile preview (set profile to preview, othewise builds to .aab for Play Store)
+remove line 265 in useFormState (just bypassing validation for easier testing, must be reverted)

@@ -262,8 +262,8 @@ export function useFormState() {
    */
   const handleSubmit = async () => {
     setSubmitResult(null);
-    if (!validate()) return;
-
+    // if (!validate()) return; // testing purposes, remove this
+ 
     setIsSubmitting(true);
     try {
       const result = await submitRegistrationUpdate(form);
