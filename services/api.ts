@@ -6,6 +6,7 @@
 
 import { FormData } from '@/types/form';
 import { generateAndDownloadDocx } from './docGenerator';
+import { Alert } from 'react-native';
 
 /** Simulated network latency in milliseconds */
 const MOCK_DELAY_MS = 1500;
@@ -47,6 +48,7 @@ export async function submitRegistrationUpdate(formData: FormData): Promise<ApiR
   try {
     await generateAndDownloadDocx(formData);
   } catch (error) {
+    Alert.alert(`${error instanceof Error ? error.message : String(error)}`);
     console.error('[API] Error generating DOCX document:', error);
     throw new Error(
       `Failed to generate document: ${error instanceof Error ? error.message : String(error)}`
