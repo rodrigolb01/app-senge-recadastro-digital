@@ -48,7 +48,19 @@ export async function submitRegistrationUpdate(formData: FormData): Promise<ApiR
   try {
     await generateAndDownloadDocx(formData);
   } catch (error) {
-    Alert.alert(`${error instanceof Error ? error.message : String(error)}`);
+    // Alert.alert(`${error instanceof Error ? error.message : String(error)}`);
+
+    const fullMessage = error instanceof Error ? 
+      `${error.message}\n\nStack: ${error.stack}` : 
+      JSON.stringify(error, null, 2);
+
+    // Split into 200-character chunks to force the Alert to show them
+    const chunks = fullMessage.match(/.{1,200}/g) || [];
+    
+    chunks.forEach((chunk, index) => {
+      Alert.alert(`Error Part ${index + 1}`, chunk);
+    });
+
     console.error('[API] Error generating DOCX document:', error);
     throw new Error(
       `Failed to generate document: ${error instanceof Error ? error.message : String(error)}`

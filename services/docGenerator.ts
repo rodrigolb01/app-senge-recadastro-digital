@@ -8,9 +8,9 @@
  */
 
 
-import * as FileSystem from 'expo-file-system/legacy'
+import * as FileSystem from 'expo-file-system/legacy' //UNDEFINED??
 import * as Sharing from 'expo-sharing';
-import { Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import {
   Document,
   Packer,
@@ -339,6 +339,9 @@ export async function generateAndDownloadDocx(data: FormData): Promise<void> {
   const fileName = `atualizacao_cadastral_${data.cpf.replace(/\D/g, '')}.docx`;
 
   try {
+      Alert.alert("FileSystem is: " + typeof(FileSystem));
+      console.log("FileSystem is: " + typeof(FileSystem))
+
     if (Platform.OS === 'web') {
       // ── Web Path ──────────────────────────────────────────
       const { saveAs } = await import('file-saver');
@@ -354,7 +357,8 @@ export async function generateAndDownloadDocx(data: FormData): Promise<void> {
 
       // 3. Write the file using Base64 encoding
       await FileSystem.writeAsStringAsync(filePath, base64, {
-        encoding: 'base64',
+        // encoding: FileSystem.EncodingType.Base64,
+        encoding: 'base64'
       });
       
 
@@ -371,7 +375,7 @@ export async function generateAndDownloadDocx(data: FormData): Promise<void> {
       }
     }
   } catch (error) {
-    console.error('DocGenerator error: ', error);
+    console.error(error);
     throw error;
   }
 }
