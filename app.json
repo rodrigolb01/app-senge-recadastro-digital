@@ -19,22 +19,20 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-web-browser",
-      "expo-file-system",
-      "expo-sharing"
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
     },
+    "owner": "kuroik369",
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "be42217c-466d-44eb-899c-426e14b42ef6"
+        "projectId": "8bb56230-cdb8-420f-b0f4-43a87bb60e5d"
       }
     },
-    "owner": "rodrigolb",
     "android": {
-      "package": "com.rodrigolb.boltexponativewind"
+      "package": "com.kuroik369.boltexponativewind"
     }
   }
 }
