@@ -339,9 +339,6 @@ export async function generateAndDownloadDocx(data: FormData): Promise<void> {
   const fileName = `atualizacao_cadastral_${data.cpf.replace(/\D/g, '')}.docx`;
 
   try {
-      Alert.alert("FileSystem is: " + typeof(FileSystem));
-      console.log("FileSystem is: " + typeof(FileSystem))
-
     if (Platform.OS === 'web') {
       // ── Web Path ──────────────────────────────────────────
       const { saveAs } = await import('file-saver');

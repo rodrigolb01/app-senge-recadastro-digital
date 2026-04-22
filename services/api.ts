@@ -50,16 +50,16 @@ export async function submitRegistrationUpdate(formData: FormData): Promise<ApiR
   } catch (error) {
     // Alert.alert(`${error instanceof Error ? error.message : String(error)}`);
 
-    const fullMessage = error instanceof Error ? 
-      `${error.message}\n\nStack: ${error.stack}` : 
-      JSON.stringify(error, null, 2);
+    // const fullMessage = error instanceof Error ?  //for debugging, uncomment this 
+    //   `${error.message}\n\nStack: ${error.stack}` : 
+    //   JSON.stringify(error, null, 2);
 
-    // Split into 200-character chunks to force the Alert to show them
-    const chunks = fullMessage.match(/.{1,200}/g) || [];
+    // // Split into 200-character chunks to force the Alert to show them
+    // const chunks = fullMessage.match(/.{1,200}/g) || [];
     
-    chunks.forEach((chunk, index) => {
-      Alert.alert(`Error Part ${index + 1}`, chunk);
-    });
+    // chunks.forEach((chunk, index) => {
+    //   Alert.alert(`Error Part ${index + 1}`, chunk);
+    // });
 
     console.error('[API] Error generating DOCX document:', error);
     throw new Error(

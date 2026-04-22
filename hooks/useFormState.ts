@@ -262,13 +262,13 @@ export function useFormState() {
    */
   const handleSubmit = async () => {
     setSubmitResult(null);
-    // if (!validate()) return; // testing purposes, remove this
+    if (!validate()) return; 
  
     setIsSubmitting(true);
     try {
       const result = await submitRegistrationUpdate(form);
       setSubmitResult(result);
-      if (result.success) setForm(INITIAL_FORM);
+      // if (result.success) setForm(INITIAL_FORM);
     } catch {
       setSubmitResult({ success: false, message: 'Erro ao enviar. Tente novamente.' });
     } finally {
